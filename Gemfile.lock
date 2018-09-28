@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tibetan (0.1.0)
+    tibetan (0.1.1)
 
 GEM
   remote: https://rubygems.org/
@@ -13,10 +13,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  tibetan!
   bundler (~> 1.16)
   minitest (~> 5.0)
   rake (~> 10.0)
+  tibetan!
 
 BUNDLED WITH
    1.16.2
