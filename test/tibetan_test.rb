@@ -11,6 +11,7 @@ class TibetanTest < Minitest::Test
   end
   
   def test_it_transliterates_punctuation
+    assert_equal "_", Tibetan.t(" ")
     # 1. the syllabic boundary marker is represented by a hyphen in proper names and by a space in other words
     assert_equal " ", Tibetan.t("་")
     # 2. Transcribe a centered point ( ・) indicating a space with a space.
@@ -21,10 +22,10 @@ class TibetanTest < Minitest::Test
   end
 
   def test_it_transliterates_numbers
-    assert_equal "0 1 2 3 4 5 6 7 8 9", Tibetan.t("༠ ༡ ༢ ༣ ༤ ༥ ༦ ༧ ༨ ༩")
+    assert_equal "0 1 2 3 4 5 6 7 8 9", Tibetan.t("༠་༡་༢་༣་༤་༥་༦་༧་༨་༩")
   end
   
   def test_it_transliterates_half_numbers
-    assert_equal "0.5 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5", Tibetan.t("༪ ༫ ༬ ༭ ༮ ༯ ༰ ༱ ༲ ༳")
+    assert_equal "0.5 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5", Tibetan.t("༪་༫་༬་༭་༮་༯་༰་༱་༲་༳")
   end
 end
