@@ -27,6 +27,7 @@ module Tibetan
     "༳" => "9.5",
     # Punctuation:
     "་" => " ",
+    " " => "_",
     # Phrase Delimiting Marks
     "།" => "/",
     "༎" => "//",
