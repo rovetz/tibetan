@@ -27,12 +27,12 @@ require "tibetan"
 And then
 
 ```ruby
-Tibetan.transliterate("العربية")
+Tibetan.transliterate("བོད་སྐད་")
 ```
 or
 
 ```ruby
-Tibetan.t("العربية")
+Tibetan.t("བོད་སྐད་")
 ```
 
 ## Development
