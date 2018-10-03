@@ -123,13 +123,42 @@ module Tibetan
     "ླྀ"  => "ḷ",
     "ཹ" => "ḹ",
   }
+  
+  CONSONANTS = %w(ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ)
+  SUBSCRIPTS = %w(ྐ ྑ ྒ ྔ ྕ ྖ ྗ ྙ ྟ ྠ ྡ ྣ ྤ ྥ ྦ ྨ ྩ ྪ ྫ ྭ ྮ ྯ ྰ ྱ ྲ ླ ྴ ྶ ྷ)
+  VOWELS = %w(ྸ  ི  ུ  ེ  ོ a)
+  SEP = "་"
+  DEFAULT_VOWEL = "a"
 
   class << self
     def transliterate(string="", to=:tibetan)
+      string = string.to_s
+      
+      # Split long phrase into small parts and transliterate separately
+      if string.split(SEP).size > 1
+        string = string.split(SEP).map do |str|
+          transliterate(str)
+        end.join(SEP)
+      end
+      
+      insert_default_vowel!(string)
+
       character_table = Module.const_get(to.to_s.capitalize)::CHARACTER_TABLE
-      string.to_s.gsub(/#{Regexp.union(character_table.keys).source}/i, character_table)
+      string.to_s.gsub(/#{Regexp.union(character_table.keys).source}/i, character_table)      
     end
     alias_method :t, :transliterate
-  end
 
+    def insert_default_vowel!(string="")
+      # 1. after subscript
+      if (string.chars & VOWELS).empty?
+        index = string.rindex(/#{SUBSCRIPTS.join('|')}/)
+        string = string.insert(index+1, DEFAULT_VOWEL) unless index.nil?
+      end
+      # 2. after consonant, if not added in 1st step
+      if (string.chars & VOWELS).empty? && (string.chars & CONSONANTS).any?
+        index = string.size > 2 ? 1 : 0
+        string = string.insert(index+1, DEFAULT_VOWEL) unless index.nil?
+      end
+    end
+  end
 end
