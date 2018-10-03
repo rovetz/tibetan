@@ -1,6 +1,6 @@
-# Tibetan
+# Tibetan -> Wylie
 
-Romanization of Tibetan. It transliterates Tibetan text to the Roman (Latin) script.
+Romanization of Tibetan. It transliterates Tibetan text to the Latin script using THL EWTS (Extended Wylie Transliteration Scheme).
 
 ## Installation
 
@@ -27,12 +27,16 @@ require "tibetan"
 And then
 
 ```ruby
-Tibetan.transliterate("བོད་སྐད་")
+Tibetan.transliterate("བོད་སྐད་") # => "bod skad"
+Tibetan.transliterate("༡༢༣") # => "123"
+Tibetan.transliterate("༪") # => "0.5"
 ```
 or
 
 ```ruby
-Tibetan.t("བོད་སྐད་")
+Tibetan.t("བོད་སྐད་") # => "bod skad"
+Tibetan.t("༡༢༣") # => "123"
+Tibetan.t("༪") # => "0.5"
 ```
 
 ## Development
