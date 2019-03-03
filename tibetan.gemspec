@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["zakbox@gmail.com"]
 
   spec.summary       = "Romanization (transliteration) of Tibetan"
-  spec.description   = "Converts Tibetan text to the Roman (Latin) script"
+  spec.description   = "Romanization (transliteration) of Tibetan. Converts Tibetan text to the Roman (Latin) script using THL EWTS (Extended Wylie Transliteration Scheme)"
   spec.homepage      = "https://github.com/rovetz/tibetan"
   spec.license       = "MIT"
 
