@@ -39,6 +39,16 @@ Tibetan.t("༡༢༣") # => "123"
 Tibetan.t("༪") # => "0.5"
 ```
 
+## References
+http://www.thlib.org/reference/transliteration/#!essay=/thl/ewts/meta/
+http://www.thlib.org/reference/transliteration/teachingewts.pdf
+http://www.thlib.org/reference/transliteration/phconverter.php
+https://www.unicode.org/charts/PDF/U0F00.pdf
+http://tibetan.spb.ru/lessons/wylie.phtml
+https://github.com/gitpan/App-Lingua-BO-Wylie-Transliteration
+https://github.com/BlueVajra/Wylie
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
