@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "tibetan/version"
 
 module Tibetan
@@ -132,7 +134,7 @@ module Tibetan
 
   class << self
     def transliterate(string="", to=:tibetan)
-      string = string.to_s
+      string = string.to_s.dup
       
       # Split long phrase into small parts and transliterate separately
       if string.split(SEP).size > 1
