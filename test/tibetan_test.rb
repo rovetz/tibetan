@@ -6,8 +6,8 @@ class TibetanTest < Minitest::Test
   end
 
   def test_it_transliterates_tibetan
-    assert_equal "bod ", Tibetan.t("བོད་")
-    assert_equal "skad ", Tibetan.t("སྐད་")
+    assert_equal "bod", Tibetan.t("བོད་")
+    assert_equal "skad", Tibetan.t("སྐད་")
     assert_equal "bod skad", Tibetan.t("བོད་སྐད་")
     # TODO: support Sanskrit symbols
     # assert_equal "shuddho`haṃ", Tibetan.t("ཤུདྡྷོ྅ཧ")
@@ -38,11 +38,11 @@ class TibetanTest < Minitest::Test
     assert_equal "ri mgo na nyal na dka'/", Tibetan.t("རི་མགོ་ན་ཉལ་ན་དཀའ།")
     assert_equal "gcig", Tibetan.t("གཅིག")
     
-    assert_equal "bsal ", Tibetan.t("བསལ་")
-    assert_equal "spyir ", Tibetan.t("སྤྱིར་")
-    assert_equal "dmigs ", Tibetan.t("དམིགས་")
-    assert_equal "gros ", Tibetan.t("གྲོས་")
-    assert_equal "blang ", Tibetan.t("བླང་")
+    assert_equal "bsal", Tibetan.t("བསལ་")
+    assert_equal "spyir", Tibetan.t("སྤྱིར་")
+    assert_equal "dmigs", Tibetan.t("དམིགས་")
+    assert_equal "gros", Tibetan.t("གྲོས་")
+    assert_equal "blang", Tibetan.t("བླང་")
 
     assert_equal "srid pa", Tibetan.t("སྲིད་པ་")
     assert_equal "'jigs med", Tibetan.t("འཇིགས་མེད་")
@@ -50,20 +50,22 @@ class TibetanTest < Minitest::Test
     assert_equal "tshogs chen", Tibetan.t("ཚོགས་ཆེན་")
     assert_equal "smon lam", Tibetan.t("སྨོན་ལམ་")
     
-    assert_equal "dpal ", Tibetan.t("དཔལ་")
-    assert_equal "sgra ", Tibetan.t("སྒྲ་")
-    assert_equal "dbyangs ", Tibetan.t("དབྱངས་")
+    assert_equal "dpal", Tibetan.t("དཔལ་")
+    assert_equal "sgra", Tibetan.t("སྒྲ་")
+    assert_equal "dbyangs", Tibetan.t("དབྱངས་")
     assert_equal "go la spyi'i rin thang /", Tibetan.t("གོ་ལ་སྤྱིའི་རིན་ཐང་།")
 
-    assert_equal "ma'i ", Tibetan.t("མའི་")
-    
-    # FIXME:
-    # assert_equal "nang chos dang kha che'i chos lugs/_tshad mtho/", Tibetan.t("ནང་ཆོས་དང་ཁ་ཆེའི་ཆོས་ལུགས། ཚད་མཐོ།")
-    # assert_equal "dge slong ma'i tshogs 'du'i gsung bshad phyoDa bsdoms/_nyin 1/", Tibetan.t("དགེ་སློང་མའི་ཚོགས་འདུའི་གསུང་བཤད་ཕྱོཌ་བསྡོམས། ཉིན་༡།")
+    assert_equal "ma'i", Tibetan.t("མའི་")
+    assert_equal "nang chos dang kha che'i chos lugs/_tshad mtho/", Tibetan.t("ནང་ཆོས་དང་ཁ་ཆེའི་ཆོས་ལུགས། ཚད་མཐོ།")
+    assert_equal "dge slong ma'i tshogs 'du'i gsung bshad phyoDa bsdoms/_nyin 1/", Tibetan.t("དགེ་སློང་མའི་ཚོགས་འདུའི་གསུང་བཤད་ཕྱོཌ་བསྡོམས། ཉིན་༡།")
+
+    assert_equal "«sde bstan dkar chag»", Tibetan.t("«སྡེ་བསྟན་དཀར་ཆག»")
+    assert_equal "[1]«pe»«snar»med/_[2]«snar»rim/", Tibetan.t("[༡]«པེ་»«སྣར་»མེད། [༢]«སྣར་»རིམ།")
+    assert_equal "[5]«pe»«snar»dka' ba/_[6]«pe»«snar»-yang /", Tibetan.t("[༥]«པེ་»«སྣར་»དཀའ་བ། [༦]«པེ་»«སྣར་»-ཡང་།")
 
     # Exceptions
-    # assert_equal "g.yas", Tibetan.t("གཡས་")
-    # assert_equal "g.yon", Tibetan.t("གཡོན་")    
+    assert_equal "g.yas", Tibetan.t("གཡས་")
+    assert_equal "g.yon", Tibetan.t("གཡོན་")    
   end
   
   def test_it_transliterates_punctuation

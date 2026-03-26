@@ -40,6 +40,9 @@ Tibetan.t("༪") # => "0.5"
 ```
 
 ## References
+https://rywiki.tsadra.org/index.php/Wylie
+https://sorig.info/images/my-pages/about/transliteration-en.pdf
+https://resources.christian-steinert.de/download/WylieTransliteration.pdf
 http://www.thlib.org/reference/transliteration/#!essay=/thl/ewts/meta/
 http://www.thlib.org/reference/transliteration/teachingewts.pdf
 http://www.thlib.org/reference/transliteration/phconverter.php

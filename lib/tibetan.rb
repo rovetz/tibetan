@@ -109,6 +109,12 @@ module Tibetan
     "ྷ" => "h",
     "ཨ" => "a",
     "ྸ" => "a",
+    # Retroflex Consonants
+    "ཊ" => "T", "ྚ" => "T",
+    "ཋ" => "Th", "ྛ" => "Th",
+    "ཌ" => "Da", "ྜ" => "D",
+    "ཎ" => "N", "ྞ" => "N",
+    "ཥ" => "S", "ྵ" => "S",
     # Vowels
     "ི"  => "i",
     "ུ" => "u",
@@ -126,8 +132,8 @@ module Tibetan
     "ཹ" => "ḹ",
   }
   
-  CONSONANTS = %w(ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ)
-  SUBSCRIPTS = %w(ྐ ྑ ྒ ྔ ྕ ྖ ྗ ྙ ྟ ྠ ྡ ྣ ྤ ྥ ྦ ྨ ྩ ྪ ྫ ྭ ྮ ྯ ྰ ྱ ྲ ླ ྴ ྶ ྷ)
+  CONSONANTS = %w(ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཊ ཋ ཌ ཎ ཥ)
+  SUBSCRIPTS = %w(ྐ ྑ ྒ ྔ ྕ ྖ ྗ ྙ ྟ ྠ ྡ ྣ ྤ ྥ ྦ ྨ ྩ ྪ ྫ ྭ ྮ ྯ ྰ ྱ ྲ ླ ྴ ྶ ྷ ྚ ྛ ྜ ྞ ྵ)
   VOWELS = %w(ྸ  ི  ུ  ེ  ོ a)
   SEP = "་"
   DEFAULT_VOWEL = "a"
@@ -137,16 +143,25 @@ module Tibetan
       string = string.to_s.dup
       
       # Split long phrase into small parts and transliterate separately
-      if string.split(SEP).size > 1
-        string = string.split(SEP).map do |str|
+      # Split by anything that isn't a Tibetan consonant, subscript, or vowel
+      parts = string.split(/([^#{CONSONANTS.join}#{SUBSCRIPTS.join}#{VOWELS.join}]+)/).reject(&:empty?)
+      if parts.size > 1
+        res = parts.map do |str|
           transliterate(str)
-        end.join(SEP)
+        end.join
+        # During mapping, trailing tseks become spaces. This cleans up erroneous spaces 
+        # before closing punctuation (e.g. «pe » -> «pe») and drops trailing spaces.
+        res.gsub!(/ +([»\]\)]|\Z)/, '\1')
+        return res
       end
 
       # Implicit vowel 'a' before 'a-chung preceded by a consonant/subscript
       string.gsub!(/([#{CONSONANTS.join}#{SUBSCRIPTS.join}])འ/, '\1aའ')
 
       insert_default_vowel!(string)
+
+      # Exception: distinguish prefix 'g' and root 'y' (g.y) from root 'g' and subjoined 'y' (gy)
+      string.gsub!("གཡ", "ག.ཡ")
 
       character_table = Module.const_get(to.to_s.capitalize)::CHARACTER_TABLE
       string.to_s.gsub(/#{Regexp.union(character_table.keys).source}/i, character_table)      
@@ -156,13 +171,30 @@ module Tibetan
     def insert_default_vowel!(string="")
       # 1. after subscript
       if (string.chars & VOWELS).empty?
-        index = string.rindex(/#{SUBSCRIPTS.join('|')}/)
-        string = string.insert(index+1, DEFAULT_VOWEL) unless index.nil?
-      end
-      # 2. after consonant, if not added in 1st step
-      if (string.chars & VOWELS).empty? && (string.chars & CONSONANTS).any?
-        index = string.size > 2 ? 1 : 0
-        string = string.insert(index+1, DEFAULT_VOWEL) unless index.nil?
+        if (sub_idx = string.rindex(/#{SUBSCRIPTS.join('|')}/))
+          string = string.insert(sub_idx+1, DEFAULT_VOWEL)
+        elsif (string.chars & CONSONANTS).any?
+          # 2. after consonant, if not added in 1st step
+          # Count ONLY Tibetan consonants/subscripts to identify the root letter.
+          # We ignore inline punctuation (like ») to avoid inflating the string size 
+          # and placing the implicit 'a' in the wrong position.
+          tibetan_chars_count = string.chars.count { |c| CONSONANTS.include?(c) || SUBSCRIPTS.include?(c) }
+          root_idx = tibetan_chars_count > 2 ? 1 : 0
+          
+          # Find the actual string index corresponding to the root consonant
+          current = -1
+          actual_index = -1
+          string.chars.each_with_index do |c, i|
+            if CONSONANTS.include?(c) || SUBSCRIPTS.include?(c)
+              current += 1
+              if current == root_idx
+                actual_index = i
+                break
+              end
+            end
+          end
+          string = string.insert(actual_index+1, DEFAULT_VOWEL) if actual_index >= 0
+        end
       end
     end
   end
