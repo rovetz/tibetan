@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tibetan (0.1.4)
+    tibetan (0.1.5)
 
 GEM
   remote: https://rubygems.org/
@@ -23,4 +23,4 @@ DEPENDENCIES
   tibetan!
 
 BUNDLED WITH
-   4.0.9
+  4.0.9
