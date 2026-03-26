@@ -6,17 +6,21 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    minitest (5.25.5)
-    rake (13.2.1)
+    drb (2.2.3)
+    minitest (6.0.2)
+      drb (~> 2.0)
+      prism (~> 1.5)
+    prism (1.9.0)
+    rake (13.3.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 2.6)
-  minitest (~> 5.25)
-  rake (~> 13.2)
+  bundler (>= 2.6)
+  minitest (~> 6.0)
+  rake (~> 13.3)
   tibetan!
 
 BUNDLED WITH
-   2.6.7
+   4.0.9
