@@ -55,8 +55,9 @@ class TibetanTest < Minitest::Test
     assert_equal "dbyangs ", Tibetan.t("དབྱངས་")
     assert_equal "go la spyi'i rin thang /", Tibetan.t("གོ་ལ་སྤྱིའི་རིན་ཐང་།")
 
+    assert_equal "ma'i ", Tibetan.t("མའི་")
+    
     # FIXME:
-    # assert_equal "ma'i", Tibetan.t("མའི་")
     # assert_equal "nang chos dang kha che'i chos lugs/_tshad mtho/", Tibetan.t("ནང་ཆོས་དང་ཁ་ཆེའི་ཆོས་ལུགས། ཚད་མཐོ།")
     # assert_equal "dge slong ma'i tshogs 'du'i gsung bshad phyoDa bsdoms/_nyin 1/", Tibetan.t("དགེ་སློང་མའི་ཚོགས་འདུའི་གསུང་བཤད་ཕྱོཌ་བསྡོམས། ཉིན་༡།")
 

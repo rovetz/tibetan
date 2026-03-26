@@ -142,7 +142,10 @@ module Tibetan
           transliterate(str)
         end.join(SEP)
       end
-      
+
+      # Implicit vowel 'a' before 'a-chung preceded by a consonant/subscript
+      string.gsub!(/([#{CONSONANTS.join}#{SUBSCRIPTS.join}])འ/, '\1aའ')
+
       insert_default_vowel!(string)
 
       character_table = Module.const_get(to.to_s.capitalize)::CHARACTER_TABLE
