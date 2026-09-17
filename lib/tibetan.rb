@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require "tibetan/version"
+require "set"
+require_relative "tibetan/version"
 
 module Tibetan
   # Extended Wylie Transliteration Scheme (EWTS)
@@ -42,7 +43,7 @@ module Tibetan
     "༄" => "@",
     "༅" => "#",
     "༆" => "$",
-    "༇" => "	%",
+    "༇" => "%",
     # Paired Punctuation Marks (brackets)
     "༺" => "<",
     "༻" => ">",
@@ -116,85 +117,103 @@ module Tibetan
     "ཎ" => "N", "ྞ" => "N",
     "ཥ" => "S", "ྵ" => "S",
     # Vowels
-    "ི"  => "i",
+    "ི" => "i",
     "ུ" => "u",
-    "ེ"  => "e",
-    "ོ"  => "o",
+    "ེ" => "e",
+    "ོ" => "o",
     # Sanskrit Vowels
-    "ཱ"  => "ā",
-    "ཱི"  => "ī",
+    "ཱ" => "ā",
+    "ཱི" => "ī",
     "ཱུ" => "ū",
-    "ཻ"   => "ai",
-    "ཽ"   => "au",
-    "ྲྀ"  => "ṛ",
+    "ཻ" => "ai",
+    "ཽ" => "au",
+    "ྲྀ" => "ṛ",
     "ཷ" => "ṝ",
-    "ླྀ"  => "ḷ",
-    "ཹ" => "ḹ",
-  }
-  
-  CONSONANTS = %w(ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཊ ཋ ཌ ཎ ཥ)
-  SUBSCRIPTS = %w(ྐ ྑ ྒ ྔ ྕ ྖ ྗ ྙ ྟ ྠ ྡ ྣ ྤ ྥ ྦ ྨ ྩ ྪ ྫ ྭ ྮ ྯ ྰ ྱ ྲ ླ ྴ ྶ ྷ ྚ ྛ ྜ ྞ ྵ)
-  VOWELS = %w(ྸ  ི  ུ  ེ  ོ a)
+    "ླྀ" => "ḷ",
+    "ཹ" => "ḹ"
+  }.freeze
+
+  CONSONANTS = %w[ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཊ ཋ ཌ ཎ ཥ].freeze
+  SUBSCRIPTS = %w[ྐ ྑ ྒ ྔ ྕ ྖ ྗ ྙ ྟ ྠ ྡ ྣ ྤ ྥ ྦ ྨ ྩ ྪ ྫ ྭ ྮ ྯ ྰ ྱ ྲ ླ ྴ ྶ ྷ ྚ ྛ ྜ ྞ ྵ].freeze
+  VOWELS = %w[ྸ ི ུ ེ ོ a].freeze
   SEP = "་"
   DEFAULT_VOWEL = "a"
 
+  CONSONANTS_SUBSCRIPTS = (CONSONANTS + SUBSCRIPTS).freeze
+  CONSONANTS_SUBSCRIPTS_SET = Set.new(CONSONANTS_SUBSCRIPTS).freeze
+
+  SPLIT_REGEX = /([^#{Regexp.escape((CONSONANTS + SUBSCRIPTS + VOWELS).join)}]+)/
+  A_CHUNG_REGEX = /([#{Regexp.escape(CONSONANTS_SUBSCRIPTS.join)}])འ/
+  CHARACTER_TABLE_REGEX = /#{Regexp.union(CHARACTER_TABLE.keys).source}/i
+  SUBSCRIPTS_REGEX = /[#{Regexp.escape(SUBSCRIPTS.join)}]/
+  VOWELS_REGEX = /[#{Regexp.escape(VOWELS.join)}]/
+  CONSONANTS_REGEX = /[#{Regexp.escape(CONSONANTS.join)}]/
+  TRAILING_SPACES_REGEX = / +([»\])])|\s+\Z/
+
   class << self
-    def transliterate(string="", to=:tibetan)
+    def transliterate(string = "", to = :tibetan)
       string = string.to_s.dup
-      
+
       # Split long phrase into small parts and transliterate separately
       # Split by anything that isn't a Tibetan consonant, subscript, or vowel
-      parts = string.split(/([^#{CONSONANTS.join}#{SUBSCRIPTS.join}#{VOWELS.join}]+)/).reject(&:empty?)
+      parts = string.split(SPLIT_REGEX).reject(&:empty?)
       if parts.size > 1
         res = parts.map do |str|
-          transliterate(str)
+          transliterate(str, to)
         end.join
-        # During mapping, trailing tseks become spaces. This cleans up erroneous spaces 
+        # During mapping, trailing tseks become spaces. This cleans up erroneous spaces
         # before closing punctuation (e.g. «pe » -> «pe») and drops trailing spaces.
-        res.gsub!(/ +([»\]\)]|\Z)/, '\1')
+        res.gsub!(TRAILING_SPACES_REGEX, '\1')
         return res
       end
 
       # Implicit vowel 'a' before 'a-chung preceded by a consonant/subscript
-      string.gsub!(/([#{CONSONANTS.join}#{SUBSCRIPTS.join}])འ/, '\1aའ')
+      string.gsub!(A_CHUNG_REGEX, '\1aའ')
 
       insert_default_vowel!(string)
 
       # Exception: distinguish prefix 'g' and root 'y' (g.y) from root 'g' and subjoined 'y' (gy)
       string.gsub!("གཡ", "ག.ཡ")
 
-      character_table = Module.const_get(to.to_s.capitalize)::CHARACTER_TABLE
-      string.to_s.gsub(/#{Regexp.union(character_table.keys).source}/i, character_table)      
+      if to == :tibetan
+        string.gsub(CHARACTER_TABLE_REGEX, CHARACTER_TABLE)
+      else
+        character_table = Module.const_get(to.to_s.capitalize)::CHARACTER_TABLE
+        string.gsub(/#{Regexp.union(character_table.keys).source}/i, character_table)
+      end
     end
-    alias_method :t, :transliterate
+    alias t transliterate
 
-    def insert_default_vowel!(string="")
-      # 1. after subscript
-      if (string.chars & VOWELS).empty?
-        if (sub_idx = string.rindex(/#{SUBSCRIPTS.join('|')}/))
-          string = string.insert(sub_idx+1, DEFAULT_VOWEL)
-        elsif (string.chars & CONSONANTS).any?
-          # 2. after consonant, if not added in 1st step
-          # Count ONLY Tibetan consonants/subscripts to identify the root letter.
-          # We ignore inline punctuation (like ») to avoid inflating the string size 
-          # and placing the implicit 'a' in the wrong position.
-          tibetan_chars_count = string.chars.count { |c| CONSONANTS.include?(c) || SUBSCRIPTS.include?(c) }
-          root_idx = tibetan_chars_count > 2 ? 1 : 0
-          
-          # Find the actual string index corresponding to the root consonant
-          current = -1
-          actual_index = -1
-          string.chars.each_with_index do |c, i|
-            if CONSONANTS.include?(c) || SUBSCRIPTS.include?(c)
-              current += 1
-              if current == root_idx
-                actual_index = i
-                break
-              end
-            end
-          end
-          string = string.insert(actual_index+1, DEFAULT_VOWEL) if actual_index >= 0
+    private
+
+    def insert_default_vowel!(string)
+      return if VOWELS_REGEX.match?(string)
+
+      if (sub_idx = string.rindex(SUBSCRIPTS_REGEX))
+        string.insert(sub_idx + 1, DEFAULT_VOWEL)
+      elsif CONSONANTS_REGEX.match?(string)
+        # Count ONLY Tibetan consonants/subscripts to identify the root letter.
+        # We ignore inline punctuation (like ») to avoid inflating the string size
+        # and placing the implicit 'a' in the wrong position.
+        tibetan_chars_count = 0
+        string.each_char do |c|
+          tibetan_chars_count += 1 if CONSONANTS_SUBSCRIPTS_SET.include?(c)
         end
+        root_idx = tibetan_chars_count > 2 ? 1 : 0
+
+        # Find the actual string index corresponding to the root consonant
+        current = -1
+        actual_index = -1
+        string.each_char.with_index do |c, i|
+          next unless CONSONANTS_SUBSCRIPTS_SET.include?(c)
+
+          current += 1
+          if current == root_idx
+            actual_index = i
+            break
+          end
+        end
+        string.insert(actual_index + 1, DEFAULT_VOWEL) if actual_index >= 0
       end
     end
   end

@@ -10,7 +10,6 @@ AllCops:
     - "bin/**/*"
     - "pkg/**/*"
     - "vendor/**/*"
-    - "lib/tibetan.rb"
 
 Layout/LineLength:
   Max: 120
@@ -52,3 +51,7 @@ Metrics/PerceivedComplexity:
 
 Metrics/BlockNesting:
   Enabled: false
+
+Metrics/ModuleLength:
+  Max: 250
+
