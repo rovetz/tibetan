@@ -49,6 +49,9 @@ module Tibetan
     "༻" => ">",
     "༼" => "(",
     "༽" => ")",
+    "・" => " ",
+    "《" => "\"",
+    "》" => "\"",
     # Consonants, subjoined consonants
     "ཀ" => "k",
     "ྐ" => "k",
@@ -116,6 +119,18 @@ module Tibetan
     "ཌ" => "Da", "ྜ" => "D",
     "ཎ" => "N", "ྞ" => "N",
     "ཥ" => "S", "ྵ" => "S",
+    # Sanskrit Consonants
+    "གྷ" => "gh", "ྒྷ" => "gh",
+    "ཌྷ" => "Dh", "ྜྷ" => "Dh",
+    "དྷ" => "dh", "ྡྷ" => "dh",
+    "བྷ" => "bh", "ྦྷ" => "bh",
+    "ཛྷ" => "dzh", "ྫྷ" => "dzh",
+    "ྐྵ" => "kSh",
+    # Sanskrit Signs
+    "྅" => "`",
+    "ཾ" => "ṃ",
+    "ྃ" => "~ṃ",
+    "ཿ" => "ḥ",
     # Vowels
     "ི" => "i",
     "ུ" => "u",
@@ -133,8 +148,12 @@ module Tibetan
     "ཹ" => "ḹ"
   }.freeze
 
-  CONSONANTS = %w[ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཊ ཋ ཌ ཎ ཥ].freeze
-  SUBSCRIPTS = %w[ྐ ྑ ྒ ྔ ྕ ྖ ྗ ྙ ྟ ྠ ྡ ྣ ྤ ྥ ྦ ྨ ྩ ྪ ྫ ྭ ྮ ྯ ྰ ྱ ྲ ླ ྴ ྶ ྷ ྚ ྛ ྜ ྞ ྵ].freeze
+  CONSONANTS = %w[
+    ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཊ ཋ ཌ ཎ ཥ གྷ ཌྷ དྷ བྷ ཛྷ
+  ].freeze
+  SUBSCRIPTS = %w[
+    ྐ ྑ ྒ ྔ ྕ ྖ ྗ ྙ ྟ ྠ ྡ ྣ ྤ ྥ ྦ ྨ ྩ ྪ ྫ ྭ ྮ ྯ ྰ ྱ ྲ ླ ྴ ྶ ྷ ྚ ྛ ྜ ྞ ྵ ྒྷ ྜྷ ྡྷ ྦྷ ྫྷ ྐྵ
+  ].freeze
   VOWELS = %w[ྸ ི ུ ེ ོ a].freeze
   SEP = "་"
   DEFAULT_VOWEL = "a"
@@ -148,11 +167,14 @@ module Tibetan
   SUBSCRIPTS_REGEX = /[#{Regexp.escape(SUBSCRIPTS.join)}]/
   VOWELS_REGEX = /[#{Regexp.escape(VOWELS.join)}]/
   CONSONANTS_REGEX = /[#{Regexp.escape(CONSONANTS.join)}]/
-  TRAILING_SPACES_REGEX = / +([»\])])|\s+\Z/
+  TRAILING_SPACES_REGEX = / +([»\])》"]|\Z)/
 
   class << self
     def transliterate(string = "", to = :tibetan)
+      return "" if string.nil?
+
       string = string.to_s.dup
+      return "" if string.empty?
 
       # Split long phrase into small parts and transliterate separately
       # Split by anything that isn't a Tibetan consonant, subscript, or vowel

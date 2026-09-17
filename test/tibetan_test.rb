@@ -11,8 +11,9 @@ class TibetanTest < Minitest::Test
     assert_equal "bod", Tibetan.t("བོད་")
     assert_equal "skad", Tibetan.t("སྐད་")
     assert_equal "bod skad", Tibetan.t("བོད་སྐད་")
-    # TODO: support Sanskrit symbols
-    # assert_equal "shuddho`haṃ", Tibetan.t("ཤུདྡྷོ྅ཧ")
+    # Sanskrit symbols
+    assert_equal "shuddho`haṃ", Tibetan.t("ཤུདྡྷོ྅ཧཾ")
+    assert_equal "shuddho`ha", Tibetan.t("ཤུདྡྷོ྅ཧ")
 
     # COMBINATIONS
     assert_equal "lo", Tibetan.t("ལོ")
@@ -75,10 +76,10 @@ class TibetanTest < Minitest::Test
     # 1. the syllabic boundary marker is represented by a hyphen in proper names and by a space in other words
     assert_equal " ", Tibetan.t("་")
     # 2. Transcribe a centered point ( ・) indicating a space with a space.
-    # assert_equal " ", Tibetan.t("・")
-    # assert_equal "ʼBaʼ Bsod-bhas brtsams", Tibetan.t("འབའ・བསྡྷོད་བྷས་བརྩམས།")
+    assert_equal " ", Tibetan.t("・")
+    assert_equal "'ba' bsdhod bhas brtsams/", Tibetan.t("འབའ・བསྡྷོད་བྷས་བརྩམས།")
     # 3. Transcribe angle brackets (guillemets) (《 ... 》) used in the manner of quotation marks (“ ... ”) as quotation marks.
-    # Angle brackets are most typically used for indicating the titles of works.
+    assert_equal "\"bod skad\"", Tibetan.t("《བོད་སྐད་》")
   end
 
   def test_it_transliterates_numbers
@@ -87,5 +88,13 @@ class TibetanTest < Minitest::Test
 
   def test_it_transliterates_half_numbers
     assert_equal "0.5 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5", Tibetan.t("༪་༫་༬་༭་༮་༯་༰་༱་༲་༳")
+  end
+
+  def test_edge_cases
+    assert_equal "", Tibetan.t(nil)
+    assert_equal "", Tibetan.t("")
+    assert_equal "hello_world_123", Tibetan.t("hello world 123")
+    assert_equal "bod (Tibet)", Tibetan.t("བོད་(Tibet)")
+    assert_equal "bod_(Tibet)", Tibetan.t("བོད (Tibet)")
   end
 end
