@@ -1,6 +1,7 @@
 # Tibetan -> Wylie
 
 [![CI](https://github.com/rovetz/tibetan/actions/workflows/ci.yml/badge.svg)](https://github.com/rovetz/tibetan/actions/workflows/ci.yml)
+[![Gem Version](https://badge.fury.io/rb/tibetan.svg)](https://badge.fury.io/rb/tibetan)
 
 Romanization of Tibetan. It transliterates Tibetan text to the Latin script using THL EWTS (Extended Wylie Transliteration Scheme).
 
@@ -33,12 +34,16 @@ Tibetan.transliterate("བོད་སྐད་") # => "bod skad"
 Tibetan.transliterate("༡༢༣") # => "123"
 Tibetan.transliterate("༪") # => "0.5"
 ```
-or
+or using the shorthand alias `.t`:
 
 ```ruby
 Tibetan.t("བོད་སྐད་") # => "bod skad"
 Tibetan.t("༡༢༣") # => "123"
 Tibetan.t("༪") # => "0.5"
+
+# Extended Wylie (EWTS) & Sanskrit loanwords support:
+Tibetan.t("ཨོཾ་ཨཱཿཧཱུྃ") # => "oṃ āḥ hūṃ"
+Tibetan.t("ཤུདྡྷོ྅ཧཾ")   # => "shuddho`haṃ"
 ```
 
 ### Command Line Interface (CLI)
