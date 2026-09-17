@@ -97,4 +97,25 @@ class TibetanTest < Minitest::Test
     assert_equal "bod (Tibet)", Tibetan.t("བོད་(Tibet)")
     assert_equal "bod_(Tibet)", Tibetan.t("བོད (Tibet)")
   end
+
+  def test_cli_argument
+    out, status = Open3.capture2("bundle exec exe/tibetan 'བོད་སྐད་'")
+
+    assert_predicate status, :success?
+    assert_equal "bod skad\n", out
+  end
+
+  def test_cli_stdin
+    out, status = Open3.capture2("bundle exec exe/tibetan", stdin_data: "བོད་སྐད་\n")
+
+    assert_predicate status, :success?
+    assert_equal "bod skad\n", out
+  end
+
+  def test_cli_version
+    out, status = Open3.capture2("bundle exec exe/tibetan --version")
+
+    assert_predicate status, :success?
+    assert_equal "tibetan #{Tibetan::VERSION}\n", out
+  end
 end

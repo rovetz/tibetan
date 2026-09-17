@@ -26,6 +26,8 @@ Gem::Specification.new do |spec|
         f.start_with?(*%w[bin/ test/ spec/ features/ .git .github Gemfile])
     end
   end
+  spec.bindir        = "exe"
+  spec.executables   = ["tibetan"]
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", ">= 2.6"

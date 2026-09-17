@@ -10,6 +10,8 @@
   * Added Sanskrit signs: avagraha `྅` (`` ` ``), anusvara `ཾ` (`ṃ`), candrabindu `ྃ` (`~ṃ`), and visarga `ཿ` (`ḥ`).
   * Added punctuation support for centered point `・` (space) and angle brackets `《 ... 》` (`"..."`).
   * Fixed errant tab character in character mapping for U+0F07 (`"༇"`).
+* **CLI Executable:**
+  * Added `exe/tibetan` command-line tool supporting arguments, file reading, and piped STDIN input.
 * **Architecture & Encapsulation:**
   * Encapsulated internal helper `insert_default_vowel!` as a private class method.
   * Added defensive edge case handling for `nil`, empty strings, and mixed non-Tibetan text.

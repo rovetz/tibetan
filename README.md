@@ -41,6 +41,23 @@ Tibetan.t("༡༢༣") # => "123"
 Tibetan.t("༪") # => "0.5"
 ```
 
+### Command Line Interface (CLI)
+
+You can also use `tibetan` directly from the command line:
+
+```bash
+# Direct argument
+$ tibetan "བོད་སྐད་"
+bod skad
+
+# Piped input (STDIN)
+$ echo "བོད་སྐད་" | tibetan
+bod skad
+
+# File input
+$ tibetan text.txt
+```
+
 ## References
 https://rywiki.tsadra.org/index.php/Wylie
 https://sorig.info/images/my-pages/about/transliteration-en.pdf

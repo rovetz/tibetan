@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "optparse"
+require "tibetan"
+
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: tibetan [options] [text | file...]"
+  opts.separator ""
+  opts.separator "Transliterate Tibetan text to Roman script (Extended Wylie)."
+  opts.separator ""
+  opts.separator "Examples:"
+  opts.separator "  tibetan 'བོད་སྐད་'"
+  opts.separator "  echo 'བོད་སྐད་' | tibetan"
+  opts.separator "  tibetan text.txt"
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on("-v", "--version", "Show version") do
+    puts "tibetan #{Tibetan::VERSION}"
+    exit
+  end
+
+  opts.on("-h", "--help", "Show this help message") do
+    puts opts
+    exit
+  end
+end
+
+parser.parse!
+
+if ARGV.empty?
+  if $stdin.tty?
+    puts parser
+    exit 1
+  else
+    $stdin.each_line do |line|
+      puts Tibetan.t(line.chomp)
+    end
+  end
+else
+  ARGV.each do |arg|
+    if File.file?(arg)
+      File.foreach(arg) do |line|
+        puts Tibetan.t(line.chomp)
+      end
+    else
+      puts Tibetan.t(arg)
+    end
+  end
+end
