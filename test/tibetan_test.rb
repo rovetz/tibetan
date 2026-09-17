@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class TibetanTest < Minitest::Test
@@ -27,17 +29,17 @@ class TibetanTest < Minitest::Test
     assert_equal "su", Tibetan.t("སུ")
     assert_equal "'o", Tibetan.t("འོ")
 
-    # Syllable Elements 
+    # Syllable Elements
     assert_equal "gya", Tibetan.t("གྱ")
     assert_equal "gyang", Tibetan.t("གྱང")
-    
+
     # THE SHAD
     assert_equal "rta/", Tibetan.t("རྟ།")
     assert_equal "nor/", Tibetan.t("ནོར།")
     assert_equal "lug gsum/", Tibetan.t("ལུག་གསུམ།")
     assert_equal "ri mgo na nyal na dka'/", Tibetan.t("རི་མགོ་ན་ཉལ་ན་དཀའ།")
     assert_equal "gcig", Tibetan.t("གཅིག")
-    
+
     assert_equal "bsal", Tibetan.t("བསལ་")
     assert_equal "spyir", Tibetan.t("སྤྱིར་")
     assert_equal "dmigs", Tibetan.t("དམིགས་")
@@ -49,7 +51,7 @@ class TibetanTest < Minitest::Test
     assert_equal "dge 'dun", Tibetan.t("དགེ་འདུན་")
     assert_equal "tshogs chen", Tibetan.t("ཚོགས་ཆེན་")
     assert_equal "smon lam", Tibetan.t("སྨོན་ལམ་")
-    
+
     assert_equal "dpal", Tibetan.t("དཔལ་")
     assert_equal "sgra", Tibetan.t("སྒྲ་")
     assert_equal "dbyangs", Tibetan.t("དབྱངས་")
@@ -65,9 +67,9 @@ class TibetanTest < Minitest::Test
 
     # Exceptions
     assert_equal "g.yas", Tibetan.t("གཡས་")
-    assert_equal "g.yon", Tibetan.t("གཡོན་")    
+    assert_equal "g.yon", Tibetan.t("གཡོན་")
   end
-  
+
   def test_it_transliterates_punctuation
     assert_equal "_", Tibetan.t(" ")
     # 1. the syllabic boundary marker is represented by a hyphen in proper names and by a space in other words
@@ -82,7 +84,7 @@ class TibetanTest < Minitest::Test
   def test_it_transliterates_numbers
     assert_equal "0 1 2 3 4 5 6 7 8 9", Tibetan.t("༠་༡་༢་༣་༤་༥་༦་༧་༨་༩")
   end
-  
+
   def test_it_transliterates_half_numbers
     assert_equal "0.5 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5", Tibetan.t("༪་༫་༬་༭་༮་༯་༰་༱་༲་༳")
   end

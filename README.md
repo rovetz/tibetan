@@ -1,5 +1,7 @@
 # Tibetan -> Wylie
 
+[![CI](https://github.com/rovetz/tibetan/actions/workflows/ci.yml/badge.svg)](https://github.com/rovetz/tibetan/actions/workflows/ci.yml)
+
 Romanization of Tibetan. It transliterates Tibetan text to the Latin script using THL EWTS (Extended Wylie Transliteration Scheme).
 
 ## Installation
