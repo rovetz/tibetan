@@ -170,6 +170,24 @@ module Tibetan
   TRAILING_SPACES_REGEX = / +([»\])》"]|\Z)/
 
   class << self
+    # Transliterates Tibetan text into Roman (Latin) script using the Extended Wylie
+    # Transliteration Scheme (THL EWTS).
+    #
+    # @param string [String, nil] The Tibetan text to transliterate.
+    # @param to [Symbol] The character mapping table to use (defaults to :tibetan).
+    # @return [String] The transliterated Roman text (Extended Wylie).
+    #
+    # @example Transliterate standard Tibetan
+    #   Tibetan.transliterate("བོད་སྐད་")
+    #   #=> "bod skad"
+    #
+    # @example Using the short alias
+    #   Tibetan.t("༡༢༣")
+    #   #=> "123"
+    #
+    # @example Transliterating text with Sanskrit symbols
+    #   Tibetan.t("ཤུདྡྷོ྅ཧཾ")
+    #   #=> "shuddho`haṃ"
     def transliterate(string = "", to = :tibetan)
       return "" if string.nil?
 
